@@ -15,6 +15,13 @@ const AuthFormBlock = styled.div`
   }
 `;
 
+const EmailAuth = styled.div`
+  display: flex;
+  StyledInput {
+    flex-grow: 1;
+  }
+`;
+
 /**
  * 스타일링된 input
  */
@@ -28,6 +35,9 @@ const StyledInput = styled.input`
   &:focus {
     color: $oc-teal-7;
     border-bottom: 1px solid ${palette.gray[7]};
+  }
+  &:nth-child(2) {
+    margin-top: 1rem;
   }
   & + & {
     margin-top: 1rem;
@@ -68,19 +78,32 @@ const ErrorMessage = styled.div`
   margin-top: 1rem;
 `;
 
-const AuthForm = ({ type, form, onChange, onSubmit, onClick, error }) => {
+const AuthForm = ({
+  type,
+  form,
+  onChange,
+  onSubmit,
+  onClick,
+  onCheck,
+  error,
+}) => {
   const text = textMap[type];
   return (
     <AuthFormBlock>
       <h3>{text}</h3>
       <form onSubmit={onSubmit}>
-        <StyledInput
-          autoComplete="email"
-          name="email"
-          placeholder="이메일"
-          onChange={onChange}
-          value={form.email}
-        />
+        <EmailAuth>
+          <StyledInput
+            autoComplete="email"
+            name="email"
+            placeholder="이메일"
+            onChange={onChange}
+            value={form.email}
+          />
+          <Button smallBtn onClick={onCheck}>
+            인증번호 받기
+          </Button>
+        </EmailAuth>
         {type === "register" && (
           <StyledInput
             autoComplete="nickname"
@@ -108,12 +131,17 @@ const AuthForm = ({ type, form, onChange, onSubmit, onClick, error }) => {
             value={form.passwordConfirm}
           />
         )}
-        {type === "login" && (
+        {/* {type === "login" && (
           <div>
-            <input id="autoLogin" type="checkbox" name="autoLogin" />
+            <input
+              id="autoLogin"
+              type="checkbox"
+              name="autoLogin"
+              onClick={onClick}
+            />
             <label htmlFor="autoLogin">자동로그인</label>
           </div>
-        )}
+        )} */}
         {type === "login" && (
           <Footer>
             <Link to="/findpw">비밀번호 찾기</Link>
@@ -121,7 +149,12 @@ const AuthForm = ({ type, form, onChange, onSubmit, onClick, error }) => {
         )}
         {type === "register" && (
           <div>
-            <input id="termsOfService" type="checkbox" name="termsOfService" />
+            <input
+              id="termsOfService"
+              type="checkbox"
+              name="termsOfService"
+              onClick={onClick}
+            />
             <label htmlFor="termsOfService">
               서비스 이용약관에 동의합니다. (필수)
             </label>
@@ -129,7 +162,12 @@ const AuthForm = ({ type, form, onChange, onSubmit, onClick, error }) => {
         )}
         {type === "register" && (
           <div>
-            <input id="privacyPolity" type="checkbox" name="privacyPolity" />
+            <input
+              id="privacyPolity"
+              type="checkbox"
+              name="privacyPolity"
+              onClick={onClick}
+            />
             <label htmlFor="privacyPolity">
               개인정보 수집 및 이용에 동의합니다. (필수)
             </label>
@@ -137,8 +175,13 @@ const AuthForm = ({ type, form, onChange, onSubmit, onClick, error }) => {
         )}
         {type === "register" && (
           <div>
-            <input id="receivePolity" type="checkbox" name="receivePolity" />
-            <label htmlFor="receivePolity" onClick={onClick}>
+            <input
+              id="receivePolity"
+              type="checkbox"
+              name="receivePolity"
+              onClick={onClick}
+            />
+            <label htmlFor="receivePolity">
               이메일 수신에 동의합니다. (선택)
             </label>
           </div>

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { isEmail, isLength } from "validator";
 import {
   changeField,
   initializeForm,
   register,
   toggle,
+  confirm,
 } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
 import { check } from "../../modules/user";
@@ -34,11 +36,19 @@ const RegisterForm = () => {
     );
   };
 
+  const onCheck = (e) => {
+    e.preventDefault();
+    const { email } = e.target;
+    dispatch(confirm({ email }));
+  };
+
   const onClick = (e) => {
-    const { name } = e.target;
+    const { name, checked } = e.target;
     dispatch(
       toggle({
+        form: "register",
         key: name,
+        checked,
       })
     );
   };
@@ -51,9 +61,9 @@ const RegisterForm = () => {
       name,
       password,
       passwordConfirm,
+      termsOfService,
       privacyPolity,
       receivePolity,
-      termsOfService,
     } = form;
     // 하나라도 비어있다면
     if (
@@ -62,14 +72,29 @@ const RegisterForm = () => {
         name,
         password,
         passwordConfirm,
+        termsOfService,
         privacyPolity,
         receivePolity,
-        termsOfService,
       ].includes("")
     ) {
       setError("빈 칸을 모두 입력하세요.");
       return;
     }
+    if (isEmail(email) === false) {
+      setError("이메일 형식이 올바르지 않습니다.");
+      return;
+    }
+
+    if (isLength(password, { min: 8, max: 16 }) === false) {
+      setError("비밀번호는 8자 이상 16자 이하로 설정해주세요.");
+      return;
+    }
+
+    if (termsOfService === false || privacyPolity === false) {
+      setError("필수 동의 항목을 체크해주세요.");
+      return;
+    }
+
     // 비밀번호가 일치하지 않는다면
     if (password !== passwordConfirm) {
       setError("비밀번호가 일치하지 않습니다.");
@@ -84,9 +109,9 @@ const RegisterForm = () => {
         email,
         name,
         password,
+        termsOfService,
         privacyPolity,
         receivePolity,
-        termsOfService,
       })
     );
   };
@@ -106,6 +131,7 @@ const RegisterForm = () => {
       }
       // 기타 이유
       setError("회원가입 실패");
+      console.log(authError);
       return;
     }
 
@@ -142,6 +168,7 @@ const RegisterForm = () => {
       onChange={onChange}
       onSubmit={onSubmit}
       onClick={onClick}
+      onCheck={onCheck}
       error={error}
     />
   );

@@ -28,6 +28,17 @@ const LoginForm = () => {
     );
   };
 
+  // const onClick = (e) => {
+  //   const { name, checked } = e.target;
+  //   dispatch(
+  //     toggle({
+  //       form: "login",
+  //       key: name,
+  //       checked,
+  //     })
+  //   );
+  // };
+
   // 폼 등록 이벤트 핸들러
   const onSubmit = (e) => {
     e.preventDefault();
@@ -78,6 +89,7 @@ const LoginForm = () => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
+      // onClick={onClick}
       error={error}
     />
   );

@@ -9,6 +9,7 @@ import * as authAPI from "../lib/api/auth";
 const CHANGE_FIELD = "auth/CHANGE_FIELD";
 const INITIALIZE_FORM = "auth/INITIALIZE_FORM";
 const TOGGLE = "auth/TOGGLE";
+const CONFIRM = "auth/CONFIRM";
 
 const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] =
   createRequestActionTypes("auth/REGISTER");
@@ -24,7 +25,15 @@ export const changeField = createAction(
   })
 );
 
-export const toggle = createAction(TOGGLE, (key) => key);
+export const toggle = createAction(TOGGLE, ({ form, key, checked }) => ({
+  form,
+  key,
+  checked,
+}));
+
+export const confirm = createAction(CONFIRM, ({ email }) => ({
+  email,
+}));
 
 export const initializeForm = createAction(INITIALIZE_FORM, (form) => form); // register / login
 export const register = createAction(
@@ -34,29 +43,32 @@ export const register = createAction(
     name,
     password,
     passwordConfirm,
+    termsOfService,
     privacyPolity,
     receivePolity,
-    termsOfService,
   }) => ({
     email,
     name,
     password,
     passwordConfirm,
+    termsOfService,
     privacyPolity,
     receivePolity,
-    termsOfService,
   })
 );
 export const login = createAction(LOGIN, ({ email, password }) => ({
   email,
   password,
+  // autoLogin,
 }));
 
 // saga 생성
 const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
+const confirmSaga = createRequestSaga(CONFIRM, authAPI.confirmEmail);
 export function* authSaga() {
   yield takeLatest(REGISTER, registerSaga);
+  yield takeLatest(CONFIRM, confirmSaga);
   yield takeLatest(LOGIN, loginSaga);
 }
 
@@ -66,13 +78,14 @@ const initialState = {
     name: "",
     password: "",
     passwordConfirm: "",
-    privacyPolity: true,
-    receivePolity: true,
-    termsOfService: true,
+    termsOfService: false,
+    privacyPolity: false,
+    receivePolity: false,
   },
   login: {
     email: "",
     password: "",
+    // autoLogin: false,
   },
   auth: null,
   authError: null,
@@ -89,9 +102,10 @@ const auth = handleActions(
       [form]: initialState[form],
       authError: null, // 폼 전환 시 회원 인증 에러 초기화
     }),
-    [TOGGLE]: (state, { payload: key }) => ({
-      ...state,
-    }),
+    [TOGGLE]: (state, { payload: { form, key, checked } }) =>
+      produce(state, (draft) => {
+        draft[form][key] = checked;
+      }),
     // 회원가입 성공
     [REGISTER_SUCCESS]: (state, { payload: auth }) => ({
       ...state,

@@ -31,6 +31,13 @@ const buttonStyle = css`
         background: ${palette.cyan[4]};
       }
     `}
+    ${(props) =>
+    props.smallBtn &&
+    css`
+      font-size: 0.8rem;
+      display: flex;
+      padding: 0.3rem 0.3rem;
+    `}
 `;
 
 const StyledButton = styled.button`

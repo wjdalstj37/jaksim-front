@@ -26,6 +26,7 @@ const Wrapper = styled(Responsive)`
   .right {
     display: flex;
     align-items: center;
+    gap: 10px;
   }
 `;
 
@@ -56,6 +57,7 @@ const Header = ({ user, onLogout }) => {
             </div>
           ) : (
             <div className="right">
+              <Button to="/register">회원가입</Button>
               <Button to="/login">로그인</Button>
             </div>
           )}

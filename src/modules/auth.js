@@ -9,12 +9,16 @@ import * as authAPI from "../lib/api/auth";
 const CHANGE_FIELD = "auth/CHANGE_FIELD";
 const INITIALIZE_FORM = "auth/INITIALIZE_FORM";
 const TOGGLE = "auth/TOGGLE";
-const CONFIRM = "auth/CONFIRM";
 
 const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] =
   createRequestActionTypes("auth/REGISTER");
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] =
   createRequestActionTypes("auth/LOGIN");
+
+const [CONFIRM, CONFIRM_SUCCESS, CONFIRM_FAILURE] =
+  createRequestActionTypes("auth/CONFIRM");
+const [CHECKEMAIL, CHECKEMAIL_SUCCESS, CHECKEMAIL_FAILURE] =
+  createRequestActionTypes("auth/CHECKEMAIL");
 
 export const changeField = createAction(
   CHANGE_FIELD,
@@ -31,15 +35,12 @@ export const toggle = createAction(TOGGLE, ({ form, key, checked }) => ({
   checked,
 }));
 
-export const confirm = createAction(CONFIRM, ({ email }) => ({
-  email,
-}));
-
 export const initializeForm = createAction(INITIALIZE_FORM, (form) => form); // register / login
 export const register = createAction(
   REGISTER,
   ({
     email,
+    token,
     name,
     password,
     passwordConfirm,
@@ -48,6 +49,7 @@ export const register = createAction(
     receivePolity,
   }) => ({
     email,
+    token,
     name,
     password,
     passwordConfirm,
@@ -62,13 +64,19 @@ export const login = createAction(LOGIN, ({ email, password }) => ({
   // autoLogin,
 }));
 
+export const confirm = createAction(CONFIRM, ({ email }) => ({ email }));
+
+export const checkEmail = createAction(CHECKEMAIL, ({ token }) => ({ token }));
+
 // saga 생성
 const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
 const confirmSaga = createRequestSaga(CONFIRM, authAPI.confirmEmail);
+const checkEmailSaga = createRequestSaga(CHECKEMAIL, authAPI.checkEmail);
 export function* authSaga() {
   yield takeLatest(REGISTER, registerSaga);
   yield takeLatest(CONFIRM, confirmSaga);
+  yield takeLatest(CHECKEMAIL, checkEmailSaga);
   yield takeLatest(LOGIN, loginSaga);
 }
 
@@ -76,6 +84,7 @@ const initialState = {
   register: {
     email: "",
     name: "",
+    token: "",
     password: "",
     passwordConfirm: "",
     termsOfService: false,
@@ -89,6 +98,10 @@ const initialState = {
   },
   auth: null,
   authError: null,
+  emailCheck: null,
+  emailCheckError: null,
+  affirm: null,
+  affirmError: null,
 };
 
 const auth = handleActions(
@@ -127,6 +140,24 @@ const auth = handleActions(
     [LOGIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
       authError: error,
+    }),
+    [CONFIRM_SUCCESS]: (state, { payload: emailCheck }) => ({
+      ...state,
+      emailCheckError: null,
+      emailCheck,
+    }),
+    [CONFIRM_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      emailCheckError: error,
+    }),
+    [CHECKEMAIL_SUCCESS]: (state, { payload: affirm }) => ({
+      ...state,
+      affirmError: null,
+      affirm,
+    }),
+    [CHECKEMAIL_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      affirmError: error,
     }),
   },
   initialState

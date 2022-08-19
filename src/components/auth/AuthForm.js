@@ -78,6 +78,13 @@ const ErrorMessage = styled.div`
   margin-top: 1rem;
 `;
 
+const InformMessage = styled.div`
+  color: blue;
+  text-align: center;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+`;
+
 const AuthForm = ({
   type,
   form,
@@ -85,7 +92,9 @@ const AuthForm = ({
   onSubmit,
   onClick,
   onCheck,
+  onEmailCheck,
   error,
+  message,
 }) => {
   const text = textMap[type];
   return (
@@ -100,10 +109,29 @@ const AuthForm = ({
             onChange={onChange}
             value={form.email}
           />
-          <Button smallBtn onClick={onCheck}>
-            인증번호 받기
-          </Button>
+          {type === "register" && (
+            <Button smallBtn onClick={onCheck}>
+              인증번호 받기
+            </Button>
+          )}
         </EmailAuth>
+        {message && <InformMessage>{message}</InformMessage>}
+        {message && (
+          <EmailAuth>
+            <StyledInput
+              autoComplete="one-time-code"
+              name="token"
+              placeholder="인증번호"
+              onChange={onChange}
+              value={form.token}
+            />
+            {type === "register" && (
+              <Button smallBtn onClick={onEmailCheck}>
+                인증번호 확인
+              </Button>
+            )}
+          </EmailAuth>
+        )}
         {type === "register" && (
           <StyledInput
             autoComplete="nickname"
@@ -142,9 +170,12 @@ const AuthForm = ({
             <label htmlFor="autoLogin">자동로그인</label>
           </div>
         )} */}
+        {/* 모달 창 만들기 */}
         {type === "login" && (
           <Footer>
-            <Link to="/findpw">비밀번호 찾기</Link>
+            <a href="/findpw" target="_blank" rel="noreferrer">
+              비밀번호 찾기
+            </a>
           </Footer>
         )}
         {type === "register" && (
@@ -154,8 +185,9 @@ const AuthForm = ({
               type="checkbox"
               name="termsOfService"
               onClick={onClick}
+              style={{ cursor: "pointer" }}
             />
-            <label htmlFor="termsOfService">
+            <label htmlFor="termsOfService" style={{ cursor: "pointer" }}>
               서비스 이용약관에 동의합니다. (필수)
             </label>
           </div>
@@ -167,8 +199,9 @@ const AuthForm = ({
               type="checkbox"
               name="privacyPolity"
               onClick={onClick}
+              style={{ cursor: "pointer" }}
             />
-            <label htmlFor="privacyPolity">
+            <label htmlFor="privacyPolity" style={{ cursor: "pointer" }}>
               개인정보 수집 및 이용에 동의합니다. (필수)
             </label>
           </div>
@@ -180,8 +213,9 @@ const AuthForm = ({
               type="checkbox"
               name="receivePolity"
               onClick={onClick}
+              style={{ cursor: "pointer" }}
             />
-            <label htmlFor="receivePolity">
+            <label htmlFor="receivePolity" style={{ cursor: "pointer" }}>
               이메일 수신에 동의합니다. (선택)
             </label>
           </div>

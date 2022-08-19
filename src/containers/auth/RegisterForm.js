@@ -7,6 +7,7 @@ import {
   register,
   toggle,
   confirm,
+  checkEmail,
 } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
 import { check } from "../../modules/user";
@@ -15,11 +16,25 @@ import client from "../../lib/api/client";
 
 const RegisterForm = () => {
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
   const dispatch = useDispatch();
-  const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
+  const {
+    form,
+    auth,
+    authError,
+    emailCheck,
+    emailCheckError,
+    affirm,
+    affirmError,
+    user,
+  } = useSelector(({ auth, user }) => ({
     form: auth.register,
     auth: auth.auth,
     authError: auth.authError,
+    emailCheck: auth.emailCheck,
+    emailCheckError: auth.emailCheckError,
+    affirm: auth.affirm,
+    affirmError: auth.affirmError,
     user: user.user,
   }));
   const navigate = useNavigate();
@@ -38,8 +53,22 @@ const RegisterForm = () => {
 
   const onCheck = (e) => {
     e.preventDefault();
-    const { email } = e.target;
+    const { email } = form;
+    if (isEmail(email) === false) {
+      setError("이메일 형식이 올바르지 않습니다.");
+      return;
+    }
+
+    if (isEmail(email) === true) {
+      setError("");
+    }
     dispatch(confirm({ email }));
+  };
+
+  const onEmailCheck = (e) => {
+    e.preventDefault();
+    const { token } = form;
+    dispatch(checkEmail({ token }));
   };
 
   const onClick = (e) => {
@@ -58,6 +87,7 @@ const RegisterForm = () => {
     e.preventDefault();
     const {
       email,
+      token,
       name,
       password,
       passwordConfirm,
@@ -70,6 +100,7 @@ const RegisterForm = () => {
       [
         email,
         name,
+        token,
         password,
         passwordConfirm,
         termsOfService,
@@ -121,8 +152,37 @@ const RegisterForm = () => {
     dispatch(initializeForm("register"));
   }, [dispatch]);
 
+  useEffect(() => {
+    if (emailCheckError) {
+      setMessage("인증번호 전송이 실패하였습니다.");
+      return;
+    }
+
+    if (emailCheck) {
+      setMessage("인증번호가 이메일로 전송되었습니다.");
+      return;
+    }
+  }, [emailCheckError, emailCheck]);
+
+  useEffect(() => {
+    if (affirm) {
+      setMessage("이메일 인증 성공");
+      console.log(affirm);
+    }
+
+    if (affirmError) {
+      setError("이메일 인증 실패");
+      console.log(affirmError);
+      return;
+    }
+  }, [affirm, affirmError]);
+
   // 회원가입 성공 / 실패 처리
   useEffect(() => {
+    if (affirmError) {
+      setError("이메일 인증을 다시 시도해주세요.");
+      return;
+    }
     if (authError) {
       // 계정명이 이미 존재할 때
       if (authError.response.status === 404) {
@@ -147,7 +207,7 @@ const RegisterForm = () => {
       client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       dispatch(check());
     }
-  }, [auth, authError, dispatch]);
+  }, [affirmError, auth, authError, dispatch]);
 
   // user 값이 잘 설정되었는지 확인
   useEffect(() => {
@@ -169,7 +229,9 @@ const RegisterForm = () => {
       onSubmit={onSubmit}
       onClick={onClick}
       onCheck={onCheck}
+      onEmailCheck={onEmailCheck}
       error={error}
+      message={message}
     />
   );
 };

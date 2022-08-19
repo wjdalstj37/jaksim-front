@@ -30,4 +30,12 @@ export const logout = () =>
   client.delete("https://jaks1m.shop/api/v1/user/me/logout");
 
 // 이메일 인증
-export const confirmEmail = () => client.post("https://jaks1m.shop/auth/email");
+export const confirmEmail = ({ email }) =>
+  client.post("https://jaks1m.shop/auth/email", {
+    email,
+  });
+
+export const checkEmail = ({ token }) =>
+  client.post("https://jaks1m.shop/auth/email/auth", {
+    token,
+  });

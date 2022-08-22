@@ -4,7 +4,7 @@ import {
   changeField,
   initializeForm,
   login,
-  snsLogin,
+  // snsLogin,
 } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
 import { check } from "../../modules/user";
@@ -16,16 +16,14 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-  const { form, auth, authError, user, snsState, snsError } = useSelector(
-    ({ auth, user }) => ({
-      form: auth.login,
-      auth: auth.auth,
-      authError: auth.authError,
-      user: user.user,
-      snsState: auth.snsState,
-      snsError: auth.snsError,
-    })
-  );
+  const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
+    form: auth.login,
+    auth: auth.auth,
+    authError: auth.authError,
+    user: user.user,
+    // snsState: auth.snsState,
+    // snsError: auth.snsError,
+  }));
   // 인풋 변경 이벤트 핸들러
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -38,9 +36,9 @@ const LoginForm = () => {
     );
   };
 
-  const onSnsClick = () => {
-    dispatch(snsLogin());
-  };
+  // const onSnsClick = () => {
+  //   dispatch(snsLogin());
+  // };
 
   // const onClick = (e) => {
   //   const { name, checked } = e.target;
@@ -65,6 +63,30 @@ const LoginForm = () => {
     dispatch(initializeForm("login"));
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   if (snsError) {
+  //     console.log(snsError);
+  //     return;
+  //   }
+
+  //   if (snsState) {
+  //     console.log("회원가입 성공");
+  //     const accessToken = new URL(window.location.href).searchParams.get(
+  //       "accessToken"
+  //     );
+  //     const refreshToken = new URL(window.location.href).searchParams.get(
+  //       "refreshToken"
+  //     );
+  //     localStorage.setItem("accessToken", accessToken);
+  //     localStorage.setItem("refreshToken", refreshToken);
+
+  //     console.log(snsState);
+
+  //     client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  //     dispatch(check());
+  //   }
+  // }, [snsState, snsError, dispatch]);
+
   useEffect(() => {
     if (authError) {
       console.log("오류 발생");
@@ -85,29 +107,7 @@ const LoginForm = () => {
       client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       dispatch(check());
     }
-
-    if (snsError) {
-      console.log(snsError);
-      return;
-    }
-
-    if (snsState) {
-      console.log("회원가입 성공");
-      const accessToken = new URL(window.location.href).searchParams.get(
-        "accessToken"
-      );
-      const refreshToken = new URL(window.location.href).searchParams.get(
-        "refreshToken"
-      );
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-
-      console.log(snsState);
-
-      client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      dispatch(check());
-    }
-  }, [snsError, snsState, auth, authError, dispatch]);
+  }, [auth, authError, dispatch]);
 
   useEffect(() => {
     if (user) {
@@ -126,7 +126,7 @@ const LoginForm = () => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
-      onSnsClick={onSnsClick}
+      // onSnsClick={onSnsClick}
       // onClick={onClick}
       error={error}
     />

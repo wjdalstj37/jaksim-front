@@ -8,7 +8,7 @@ import {
   toggle,
   confirm,
   checkEmail,
-  snsLogin,
+  // snsLogin,
 } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
 import { check } from "../../modules/user";
@@ -29,8 +29,8 @@ const RegisterForm = () => {
     affirm,
     affirmError,
     user,
-    snsState,
-    snsError,
+    // snsState,
+    // snsError,
   } = useSelector(({ auth, user }) => ({
     form: auth.register,
     auth: auth.auth,
@@ -40,8 +40,8 @@ const RegisterForm = () => {
     affirm: auth.affirm,
     affirmError: auth.affirmError,
     user: user.user,
-    snsState: auth.snsState,
-    snsError: auth.snsError,
+    // snsState: auth.snsState,
+    // snsError: auth.snsError,
   }));
   const navigate = useNavigate();
 
@@ -88,9 +88,9 @@ const RegisterForm = () => {
     );
   };
 
-  const onSnsClick = () => {
-    dispatch(snsLogin());
-  };
+  // const onSnsClick = () => {
+  //   dispatch(snsLogin());
+  // };
 
   // 폼 등록 이벤트 핸들러
   const onSubmit = (e) => {
@@ -218,28 +218,28 @@ const RegisterForm = () => {
       dispatch(check());
     }
 
-    if (snsError) {
-      console.log(snsError);
-      return;
-    }
+    // if (snsError) {
+    //   console.log(snsError);
+    //   return;
+    // }
 
-    if (snsState) {
-      console.log("회원가입 성공");
-      const accessToken = new URL(window.location.href).searchParams.get(
-        "accessToken"
-      );
-      const refreshToken = new URL(window.location.href).searchParams.get(
-        "refreshToken"
-      );
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+    // if (snsState) {
+    //   console.log("회원가입 성공");
+    //   const accessToken = new URL(window.location.href).searchParams.get(
+    //     "accessToken"
+    //   );
+    //   const refreshToken = new URL(window.location.href).searchParams.get(
+    //     "refreshToken"
+    //   );
+    //   localStorage.setItem("accessToken", accessToken);
+    //   localStorage.setItem("refreshToken", refreshToken);
 
-      console.log(snsState);
+    //   console.log(snsState);
 
-      client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      dispatch(check());
-    }
-  }, [snsError, snsState, affirmError, auth, authError, dispatch]);
+    //   client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    //   dispatch(check());
+    // }
+  }, [affirmError, auth, authError, dispatch]);
 
   // user 값이 잘 설정되었는지 확인
   useEffect(() => {
@@ -261,7 +261,7 @@ const RegisterForm = () => {
       onSubmit={onSubmit}
       onClick={onClick}
       onCheck={onCheck}
-      onSnsClick={onSnsClick}
+      // onSnsClick={onSnsClick}
       onEmailCheck={onEmailCheck}
       error={error}
       message={message}

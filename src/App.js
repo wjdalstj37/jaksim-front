@@ -12,7 +12,7 @@ const App = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/findpw" element={<FindPwPage />} />
-      <Route path="/oauth2/redirect" element={<SnsAuthPage />} />
+      <Route path="/oauth/redirect" element={<SnsAuthPage />} />
       <Route path="/@:email">
         <Route index element={<HomePage />} />
       </Route>

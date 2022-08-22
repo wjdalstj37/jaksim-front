@@ -10,16 +10,14 @@ import client from "../../lib/api/client";
 const LoginForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const [snsState, setSnsState] = useState(null);
   const dispatch = useDispatch();
-  const { form, auth, authError, user, snsState } = useSelector(
-    ({ auth, user, sns }) => ({
-      form: auth.login,
-      auth: auth.auth,
-      authError: auth.authError,
-      user: user.user,
-      snsState: sns.snsState,
-    })
-  );
+  const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
+    form: auth.login,
+    auth: auth.auth,
+    authError: auth.authError,
+    user: user.user,
+  }));
   // 인풋 변경 이벤트 핸들러
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -33,6 +31,7 @@ const LoginForm = () => {
   };
 
   const onSnsClick = () => {
+    setSnsState(true);
     dispatch(snsLogin());
   };
 

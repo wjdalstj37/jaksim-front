@@ -18,6 +18,7 @@ import client from "../../lib/api/client";
 const RegisterForm = () => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+  const [snsState, setSnsState] = useState(null);
   const dispatch = useDispatch();
   const {
     form,
@@ -28,8 +29,7 @@ const RegisterForm = () => {
     affirm,
     affirmError,
     user,
-    snsState,
-  } = useSelector(({ auth, user, sns }) => ({
+  } = useSelector(({ auth, user }) => ({
     form: auth.register,
     auth: auth.auth,
     authError: auth.authError,
@@ -38,7 +38,6 @@ const RegisterForm = () => {
     affirm: auth.affirm,
     affirmError: auth.affirmError,
     user: user.user,
-    snsState: sns.snsState,
   }));
   const navigate = useNavigate();
 
@@ -86,6 +85,7 @@ const RegisterForm = () => {
   };
 
   const onSnsClick = () => {
+    setSnsState(true);
     dispatch(snsLogin());
   };
 

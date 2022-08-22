@@ -69,10 +69,12 @@ const LoginForm = () => {
       );
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
-      client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      dispatch(check());
+      console.log(accessToken);
+      console.log(refreshToken);
+      // client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      // dispatch(check());
     }
-  }, [sns, dispatch]);
+  }, [sns]);
 
   useEffect(() => {
     if (authError) {

@@ -10,14 +10,14 @@ import {
   checkEmail,
 } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
-import { check } from "../../modules/user";
+import { check, sns } from "../../modules/user";
 import { useNavigate } from "react-router-dom";
 import client from "../../lib/api/client";
 
 const RegisterForm = () => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
-  const [sns, setSns] = useState(false);
+  const [snsCheck, setSnsCheck] = useState(false);
   const dispatch = useDispatch();
   const {
     form,
@@ -25,6 +25,7 @@ const RegisterForm = () => {
     authError,
     emailCheck,
     emailCheckError,
+    snsValue,
     affirm,
     affirmError,
     user,
@@ -36,6 +37,7 @@ const RegisterForm = () => {
     emailCheckError: auth.emailCheckError,
     affirm: auth.affirm,
     affirmError: auth.affirmError,
+    snsValue: user.snsValue,
     user: user.user,
   }));
   const navigate = useNavigate();
@@ -83,9 +85,8 @@ const RegisterForm = () => {
     );
   };
 
-  const onSnsClick = (e) => {
-    e.preventDefault();
-    setSns(true);
+  const onSnsClick = () => {
+    setSnsCheck(true);
   };
 
   // 폼 등록 이벤트 핸들러
@@ -183,23 +184,14 @@ const RegisterForm = () => {
   }, [affirm, affirmError]);
 
   useEffect(() => {
-    if (sns) {
-      console.log("회원가입 성공");
-
-      const accessToken = new URL(window.location.href).searchParams.get(
-        "accessToken"
-      );
-      const refreshToken = new URL(window.location.href).searchParams.get(
-        "refreshToken"
-      );
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      console.log(accessToken);
-      console.log(refreshToken);
+    if (snsCheck) {
+      if (snsValue) {
+        dispatch(sns());
+      }
       // client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       // dispatch(check());
     }
-  }, [sns]);
+  }, [snsValue, snsCheck, dispatch]);
 
   // 회원가입 성공 / 실패 처리
   useEffect(() => {

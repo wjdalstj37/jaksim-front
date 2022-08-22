@@ -2,21 +2,24 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeField, initializeForm, login } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
-import { check } from "../../modules/user";
+import { check, sns } from "../../modules/user";
 import { useNavigate } from "react-router-dom";
 import client from "../../lib/api/client";
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-  const [sns, setSns] = useState(false);
+  const [snsCheck, setSnsCheck] = useState(false);
   const dispatch = useDispatch();
-  const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
-    form: auth.login,
-    auth: auth.auth,
-    authError: auth.authError,
-    user: user.user,
-  }));
+  const { form, auth, authError, snsValue, user } = useSelector(
+    ({ auth, user }) => ({
+      form: auth.login,
+      auth: auth.auth,
+      authError: auth.authError,
+      snsValue: user.snsValue,
+      user: user.user,
+    })
+  );
   // 인풋 변경 이벤트 핸들러
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -29,9 +32,8 @@ const LoginForm = () => {
     );
   };
 
-  const onSnsClick = (e) => {
-    e.preventDefault();
-    setSns(true);
+  const onSnsClick = () => {
+    setSnsCheck(true);
   };
 
   // const onClick = (e) => {
@@ -58,23 +60,14 @@ const LoginForm = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (sns) {
-      console.log("회원가입 성공");
-
-      const accessToken = new URL(window.location.href).searchParams.get(
-        "accessToken"
-      );
-      const refreshToken = new URL(window.location.href).searchParams.get(
-        "refreshToken"
-      );
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      console.log(accessToken);
-      console.log(refreshToken);
+    if (snsCheck) {
+      if (snsValue) {
+        dispatch(sns());
+      }
       // client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       // dispatch(check());
     }
-  }, [sns]);
+  }, [snsValue, snsCheck, dispatch]);
 
   useEffect(() => {
     if (authError) {

@@ -93,6 +93,7 @@ const AuthForm = ({
   onClick,
   onCheck,
   onEmailCheck,
+  onSnsClick,
   error,
   message,
 }) => {
@@ -230,13 +231,13 @@ const AuthForm = ({
           <p>SNS 계정으로 로그인</p>
           <div>
             <a href="https://jaks1m.shop/oauth2/authorization/naver">
-              <button>네이버</button>
+              <button onClick={onSnsClick}>네이버</button>
             </a>
             <a href="https://jaks1m.shop/oauth2/authorization/kakao">
-              <button>카카오</button>
+              <button onClick={onSnsClick}>카카오</button>
             </a>
             <a href="https://jaks1m.shop/oauth2/authorization/google">
-              <button>구글</button>
+              <button onClick={onSnsClick}>구글</button>
             </a>
           </div>
         </div>
@@ -246,13 +247,13 @@ const AuthForm = ({
           <p>SNS 계정으로 가입</p>
           <div>
             <a href="https://jaks1m.shop/oauth2/authorization/naver">
-              <button>네이버</button>
+              <button onClick={onSnsClick}>네이버</button>
             </a>
             <a href="https://jaks1m.shop/oauth2/authorization/kakao">
-              <button>카카오</button>
+              <button onClick={onSnsClick}>카카오</button>
             </a>
             <a href="https://jaks1m.shop/oauth2/authorization/google">
-              <button>구글</button>
+              <button onClick={onSnsClick}>구글</button>
             </a>
           </div>
         </div>

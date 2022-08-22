@@ -19,7 +19,6 @@ export const logout = createAction(LOGOUT);
 const checkSaga = createRequestSaga(CHECK, authAPI.check);
 
 function checkFailureSaga() {
-  console.log("1");
   try {
     const refreshToken = localStorage.getItem("refreshToken");
     const response = axios.post(
@@ -29,14 +28,11 @@ function checkFailureSaga() {
         headers: { Authorization: `Bearer ${refreshToken}` },
       }
     );
-    console.log(response);
     if (response.status === 200) {
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${response.body.accessToken}`;
-      console.log("2");
     }
-    console.log("3");
 
     // localStorage.removeItem("user"); // localStorage 에서 user 제거하고
   } catch (e) {

@@ -9,6 +9,7 @@ import client from "../../lib/api/client";
 const LoginForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const [sns, setSns] = useState(false);
   const dispatch = useDispatch();
   const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
     form: auth.login,
@@ -26,6 +27,11 @@ const LoginForm = () => {
         value,
       })
     );
+  };
+
+  const onSnsClick = (e) => {
+    e.preventDefault();
+    setSns(true);
   };
 
   // const onClick = (e) => {
@@ -50,6 +56,23 @@ const LoginForm = () => {
   useEffect(() => {
     dispatch(initializeForm("login"));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (sns) {
+      console.log("회원가입 성공");
+
+      const accessToken = new URL(window.location.href).searchParams.get(
+        "accessToken"
+      );
+      const refreshToken = new URL(window.location.href).searchParams.get(
+        "refreshToken"
+      );
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      dispatch(check());
+    }
+  }, [sns, dispatch]);
 
   useEffect(() => {
     if (authError) {
@@ -89,6 +112,7 @@ const LoginForm = () => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
+      onSnsClick={onSnsClick}
       // onClick={onClick}
       error={error}
     />

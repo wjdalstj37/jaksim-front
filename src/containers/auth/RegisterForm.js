@@ -17,6 +17,7 @@ import client from "../../lib/api/client";
 const RegisterForm = () => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+  const [sns, setSns] = useState(false);
   const dispatch = useDispatch();
   const {
     form,
@@ -80,6 +81,11 @@ const RegisterForm = () => {
         checked,
       })
     );
+  };
+
+  const onSnsClick = (e) => {
+    e.preventDefault();
+    setSns(true);
   };
 
   // 폼 등록 이벤트 핸들러
@@ -176,6 +182,23 @@ const RegisterForm = () => {
     }
   }, [affirm, affirmError]);
 
+  useEffect(() => {
+    if (sns) {
+      console.log("회원가입 성공");
+
+      const accessToken = new URL(window.location.href).searchParams.get(
+        "accessToken"
+      );
+      const refreshToken = new URL(window.location.href).searchParams.get(
+        "refreshToken"
+      );
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      dispatch(check());
+    }
+  }, [sns, dispatch]);
+
   // 회원가입 성공 / 실패 처리
   useEffect(() => {
     if (affirmError) {
@@ -229,6 +252,7 @@ const RegisterForm = () => {
       onClick={onClick}
       onCheck={onCheck}
       onEmailCheck={onEmailCheck}
+      onSnsClick={onSnsClick}
       error={error}
       message={message}
     />

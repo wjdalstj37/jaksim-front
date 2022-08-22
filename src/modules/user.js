@@ -11,34 +11,13 @@ const TEMP_SET_USER = "user/TEMP_SET_USER"; // 새로고침 이후 임시 로그
 const [CHECK, CHECK_SUCCESS, CHECK_FAILURE] =
   createRequestActionTypes("user/CHECK");
 
-const SNS = "user/SNS";
 const LOGOUT = "user/LOGOUT";
 
 export const tempSetUser = createAction(TEMP_SET_USER, (user) => user);
-export const sns = createAction(SNS);
 export const check = createAction(CHECK);
 export const logout = createAction(LOGOUT);
 
 const checkSaga = createRequestSaga(CHECK, authAPI.check);
-
-function snsSaga() {
-  try {
-    console.log("회원가입 성공");
-
-    const accessToken = new URL(window.location.href).searchParams.get(
-      "accessToken"
-    );
-    const refreshToken = new URL(window.location.href).searchParams.get(
-      "refreshToken"
-    );
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
-    console.log(accessToken);
-    console.log(refreshToken);
-  } catch (e) {
-    console.log(e);
-  }
-}
 
 function checkFailureSaga() {
   try {
@@ -77,14 +56,12 @@ function* logoutSaga() {
 export function* userSaga() {
   yield takeLatest(CHECK, checkSaga);
   yield takeLatest(CHECK_FAILURE, checkFailureSaga);
-  yield takeLatest(SNS, snsSaga);
   yield takeLatest(LOGOUT, logoutSaga);
 }
 
 const initialState = {
   user: null,
   checkError: null,
-  snsValue: null,
 };
 
 export default handleActions(
@@ -102,10 +79,6 @@ export default handleActions(
       ...state,
       user: null,
       checkError: error,
-    }),
-    [SNS]: (state, { payload: snsValue }) => ({
-      ...state,
-      snsValue,
     }),
     [LOGOUT]: (state) => ({
       ...state,

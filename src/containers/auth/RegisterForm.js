@@ -10,14 +10,14 @@ import {
   checkEmail,
 } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
-import { check, sns } from "../../modules/user";
+import { check } from "../../modules/user";
+import { snsLogin } from "../../modules/sns";
 import { useNavigate } from "react-router-dom";
 import client from "../../lib/api/client";
 
 const RegisterForm = () => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
-  const [snsCheck, setSnsCheck] = useState(false);
   const dispatch = useDispatch();
   const {
     form,
@@ -25,11 +25,11 @@ const RegisterForm = () => {
     authError,
     emailCheck,
     emailCheckError,
-    snsValue,
     affirm,
     affirmError,
     user,
-  } = useSelector(({ auth, user }) => ({
+    snsState,
+  } = useSelector(({ auth, user, sns }) => ({
     form: auth.register,
     auth: auth.auth,
     authError: auth.authError,
@@ -37,8 +37,8 @@ const RegisterForm = () => {
     emailCheckError: auth.emailCheckError,
     affirm: auth.affirm,
     affirmError: auth.affirmError,
-    snsValue: user.snsValue,
     user: user.user,
+    snsState: sns.snsState,
   }));
   const navigate = useNavigate();
 
@@ -86,7 +86,7 @@ const RegisterForm = () => {
   };
 
   const onSnsClick = () => {
-    setSnsCheck(true);
+    dispatch(snsLogin());
   };
 
   // 폼 등록 이벤트 핸들러
@@ -183,22 +183,13 @@ const RegisterForm = () => {
     }
   }, [affirm, affirmError]);
 
-  useEffect(() => {
-    if (snsCheck) {
-      if (snsValue) {
-        dispatch(sns());
-      }
-      // client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      // dispatch(check());
-    }
-  }, [snsValue, snsCheck, dispatch]);
-
   // 회원가입 성공 / 실패 처리
   useEffect(() => {
     if (affirmError) {
       setError("이메일 인증을 다시 시도해주세요.");
       return;
     }
+
     if (authError) {
       // 계정명이 이미 존재할 때
       if (authError.response.status === 404) {
@@ -209,6 +200,11 @@ const RegisterForm = () => {
       setError("회원가입 실패");
       console.log(authError);
       return;
+    }
+
+    if (snsState) {
+      console.log("회원가입 성공");
+      dispatch(check());
     }
 
     if (auth) {
@@ -223,7 +219,7 @@ const RegisterForm = () => {
       client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       dispatch(check());
     }
-  }, [affirmError, auth, authError, dispatch]);
+  }, [snsState, affirmError, auth, authError, dispatch]);
 
   // user 값이 잘 설정되었는지 확인
   useEffect(() => {
@@ -245,8 +241,8 @@ const RegisterForm = () => {
       onSubmit={onSubmit}
       onClick={onClick}
       onCheck={onCheck}
-      onEmailCheck={onEmailCheck}
       onSnsClick={onSnsClick}
+      onEmailCheck={onEmailCheck}
       error={error}
       message={message}
     />

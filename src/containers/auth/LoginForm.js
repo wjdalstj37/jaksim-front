@@ -2,22 +2,22 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeField, initializeForm, login } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
-import { check, sns } from "../../modules/user";
+import { check } from "../../modules/user";
+import { snsLogin } from "../../modules/sns";
 import { useNavigate } from "react-router-dom";
 import client from "../../lib/api/client";
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-  const [snsCheck, setSnsCheck] = useState(false);
   const dispatch = useDispatch();
-  const { form, auth, authError, snsValue, user } = useSelector(
-    ({ auth, user }) => ({
+  const { form, auth, authError, user, snsState } = useSelector(
+    ({ auth, user, sns }) => ({
       form: auth.login,
       auth: auth.auth,
       authError: auth.authError,
-      snsValue: user.snsValue,
       user: user.user,
+      snsState: sns.snsState,
     })
   );
   // 인풋 변경 이벤트 핸들러
@@ -33,7 +33,7 @@ const LoginForm = () => {
   };
 
   const onSnsClick = () => {
-    setSnsCheck(true);
+    dispatch(snsLogin());
   };
 
   // const onClick = (e) => {
@@ -60,22 +60,18 @@ const LoginForm = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (snsCheck) {
-      if (snsValue) {
-        dispatch(sns());
-      }
-      // client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      // dispatch(check());
-    }
-  }, [snsValue, snsCheck, dispatch]);
-
-  useEffect(() => {
     if (authError) {
       console.log("오류 발생");
       console.log(authError);
       setError("로그인 실패");
       return;
     }
+
+    if (snsState) {
+      console.log("회원가입 성공");
+      dispatch(check());
+    }
+
     if (auth) {
       console.log("로그인 성공");
       const accessToken = auth.body.accessToken;
@@ -88,7 +84,7 @@ const LoginForm = () => {
       client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       dispatch(check());
     }
-  }, [auth, authError, dispatch]);
+  }, [snsState, auth, authError, dispatch]);
 
   useEffect(() => {
     if (user) {

@@ -8,17 +8,17 @@ import {
   toggle,
   confirm,
   checkEmail,
+  snsLogin,
 } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
 import { check } from "../../modules/user";
-import { snsLogin } from "../../modules/sns";
+// import { snsLogin } from "../../modules/sns";
 import { useNavigate } from "react-router-dom";
 import client from "../../lib/api/client";
 
 const RegisterForm = () => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
-  const [snsState, setSnsState] = useState(null);
   const dispatch = useDispatch();
   const {
     form,
@@ -29,6 +29,8 @@ const RegisterForm = () => {
     affirm,
     affirmError,
     user,
+    snsState,
+    snsError,
   } = useSelector(({ auth, user }) => ({
     form: auth.register,
     auth: auth.auth,
@@ -38,6 +40,8 @@ const RegisterForm = () => {
     affirm: auth.affirm,
     affirmError: auth.affirmError,
     user: user.user,
+    snsState: auth.snsState,
+    snsError: auth.snsError,
   }));
   const navigate = useNavigate();
 
@@ -85,7 +89,6 @@ const RegisterForm = () => {
   };
 
   const onSnsClick = () => {
-    setSnsState(true);
     dispatch(snsLogin());
   };
 
@@ -202,11 +205,6 @@ const RegisterForm = () => {
       return;
     }
 
-    if (snsState) {
-      console.log("회원가입 성공");
-      dispatch(check());
-    }
-
     if (auth) {
       console.log("회원가입 성공");
       const accessToken = auth.body.accessToken;
@@ -219,7 +217,29 @@ const RegisterForm = () => {
       client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       dispatch(check());
     }
-  }, [snsState, affirmError, auth, authError, dispatch]);
+
+    if (snsError) {
+      console.log(snsError);
+      return;
+    }
+
+    if (snsState) {
+      console.log("회원가입 성공");
+      const accessToken = new URL(window.location.href).searchParams.get(
+        "accessToken"
+      );
+      const refreshToken = new URL(window.location.href).searchParams.get(
+        "refreshToken"
+      );
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      console.log(snsState);
+
+      client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      dispatch(check());
+    }
+  }, [snsError, snsState, affirmError, auth, authError, dispatch]);
 
   // user 값이 잘 설정되었는지 확인
   useEffect(() => {

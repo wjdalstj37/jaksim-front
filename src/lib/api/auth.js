@@ -29,7 +29,7 @@ export const check = () => client.get("https://jaks1m.shop/api/v1/user/me");
 export const logout = () =>
   client.delete("https://jaks1m.shop/api/v1/user/me/logout");
 
-export const snsJoin = () => client.get("https://jaks1m.shop/auth");
+export const snsJoin = () => client.get("https://jaks1m.shop/auth/success");
 
 // 이메일 인증
 export const confirmEmail = ({ email }) =>

@@ -20,6 +20,9 @@ const [CONFIRM, CONFIRM_SUCCESS, CONFIRM_FAILURE] =
 const [CHECKEMAIL, CHECKEMAIL_SUCCESS, CHECKEMAIL_FAILURE] =
   createRequestActionTypes("auth/CHECKEMAIL");
 
+const [SNS_LOGIN, SNS_LOGIN_SUCCESS, SNS_LOGIN_FAILURE] =
+  createRequestActionTypes("sns/SNS_LOGIN");
+
 export const changeField = createAction(
   CHANGE_FIELD,
   ({ form, key, value }) => ({
@@ -68,16 +71,20 @@ export const confirm = createAction(CONFIRM, ({ email }) => ({ email }));
 
 export const checkEmail = createAction(CHECKEMAIL, ({ token }) => ({ token }));
 
+export const snsLogin = createAction(SNS_LOGIN);
+
 // saga 생성
 const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
 const confirmSaga = createRequestSaga(CONFIRM, authAPI.confirmEmail);
 const checkEmailSaga = createRequestSaga(CHECKEMAIL, authAPI.checkEmail);
+const snsLoginSaga = createRequestSaga(SNS_LOGIN, authAPI.snsJoin);
 export function* authSaga() {
   yield takeLatest(REGISTER, registerSaga);
   yield takeLatest(CONFIRM, confirmSaga);
   yield takeLatest(CHECKEMAIL, checkEmailSaga);
   yield takeLatest(LOGIN, loginSaga);
+  yield takeLatest(SNS_LOGIN, snsLoginSaga);
 }
 
 const initialState = {
@@ -102,6 +109,8 @@ const initialState = {
   emailCheckError: null,
   affirm: null,
   affirmError: null,
+  snsState: null,
+  snsError: null,
 };
 
 const auth = handleActions(
@@ -158,6 +167,16 @@ const auth = handleActions(
     [CHECKEMAIL_FAILURE]: (state, { payload: error }) => ({
       ...state,
       affirmError: error,
+    }),
+    [SNS_LOGIN_SUCCESS]: (state, { payload: snsState }) => ({
+      ...state,
+      snsError: null,
+      snsState,
+    }),
+    // 회원가입 실패
+    [SNS_LOGIN_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      snsError: error,
     }),
   },
   initialState

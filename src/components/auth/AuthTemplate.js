@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import palette from "../../lib/styles/palettes";
 import { Link } from "react-router-dom";
+import LogoImage from "../image/jh_logo.jpg";
 
 /**
  * 회원가입 / 로그인 페이지의 레이아웃을 담당하는 컴포넌트입니다.
@@ -13,7 +13,7 @@ const AuthTemplateBlock = styled.div`
   top: 0;
   bottom: 0;
   right: 0;
-  background: ${palette.gray[2]};
+  background: #ffffff;
   /* flex로 내부 내용 중앙 정렬 */
   display: flex;
   flex-direction: column;
@@ -25,14 +25,20 @@ const AuthTemplateBlock = styled.div`
 const WhiteBox = styled.div`
   .logo-area {
     display: block;
-    padding-bottom: 2rem;
+    padding-bottom: 3rem;
     text-align: center;
     font-weight: bold;
     letter-spacing: 2px;
   }
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
-  padding: 2rem;
-  width: 360px;
+  .header-logo {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    vertical-align: top;
+    width: 120px;
+    height: 120px;
+  }
+  width: 430px;
   background: white;
   border-radius: 2px;
 `;
@@ -42,7 +48,9 @@ const AuthTemplate = ({ children }) => {
     <AuthTemplateBlock>
       <WhiteBox>
         <div className="logo-area">
-          <Link to="/">작심하루</Link>
+          <Link to="/">
+            <img src={LogoImage} alt="작심하루" className="header-logo" />
+          </Link>
         </div>
         {children}
       </WhiteBox>

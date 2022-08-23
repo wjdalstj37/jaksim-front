@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  changeField,
-  initializeForm,
-  login,
-  // snsLogin,
-} from "../../modules/auth";
+import { changeField, initializeForm, login } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
 import { check } from "../../modules/user";
-// import { snsLogin } from "../../modules/sns";
+
 import { useNavigate } from "react-router-dom";
 import client from "../../lib/api/client";
 
@@ -21,8 +16,6 @@ const LoginForm = () => {
     auth: auth.auth,
     authError: auth.authError,
     user: user.user,
-    // snsState: auth.snsState,
-    // snsError: auth.snsError,
   }));
   // 인풋 변경 이벤트 핸들러
   const onChange = (e) => {
@@ -35,10 +28,6 @@ const LoginForm = () => {
       })
     );
   };
-
-  // const onSnsClick = () => {
-  //   dispatch(snsLogin());
-  // };
 
   // const onClick = (e) => {
   //   const { name, checked } = e.target;
@@ -62,30 +51,6 @@ const LoginForm = () => {
   useEffect(() => {
     dispatch(initializeForm("login"));
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (snsError) {
-  //     console.log(snsError);
-  //     return;
-  //   }
-
-  //   if (snsState) {
-  //     console.log("회원가입 성공");
-  //     const accessToken = new URL(window.location.href).searchParams.get(
-  //       "accessToken"
-  //     );
-  //     const refreshToken = new URL(window.location.href).searchParams.get(
-  //       "refreshToken"
-  //     );
-  //     localStorage.setItem("accessToken", accessToken);
-  //     localStorage.setItem("refreshToken", refreshToken);
-
-  //     console.log(snsState);
-
-  //     client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-  //     dispatch(check());
-  //   }
-  // }, [snsState, snsError, dispatch]);
 
   useEffect(() => {
     if (authError) {
@@ -126,8 +91,6 @@ const LoginForm = () => {
       form={form}
       onChange={onChange}
       onSubmit={onSubmit}
-      // onSnsClick={onSnsClick}
-      // onClick={onClick}
       error={error}
     />
   );

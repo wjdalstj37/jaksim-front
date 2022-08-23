@@ -19,8 +19,6 @@ const SnsAuthPage = () => {
     let refreshToken = new URL(window.location.href).searchParams.get(
       "refreshToken"
     );
-    console.log(accessToken);
-    console.log(refreshToken);
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
     client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;

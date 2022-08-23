@@ -8,11 +8,10 @@ import {
   toggle,
   confirm,
   checkEmail,
-  // snsLogin,
 } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
 import { check } from "../../modules/user";
-// import { snsLogin } from "../../modules/sns";
+
 import { useNavigate } from "react-router-dom";
 import client from "../../lib/api/client";
 
@@ -29,8 +28,6 @@ const RegisterForm = () => {
     affirm,
     affirmError,
     user,
-    // snsState,
-    // snsError,
   } = useSelector(({ auth, user }) => ({
     form: auth.register,
     auth: auth.auth,
@@ -87,10 +84,6 @@ const RegisterForm = () => {
       })
     );
   };
-
-  // const onSnsClick = () => {
-  //   dispatch(snsLogin());
-  // };
 
   // 폼 등록 이벤트 핸들러
   const onSubmit = (e) => {
@@ -163,7 +156,7 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (emailCheckError) {
-      setMessage("인증번호 전송이 실패하였습니다.");
+      setError("인증번호 전송이 실패하였습니다.");
       return;
     }
 
@@ -217,28 +210,6 @@ const RegisterForm = () => {
       client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       dispatch(check());
     }
-
-    // if (snsError) {
-    //   console.log(snsError);
-    //   return;
-    // }
-
-    // if (snsState) {
-    //   console.log("회원가입 성공");
-    //   const accessToken = new URL(window.location.href).searchParams.get(
-    //     "accessToken"
-    //   );
-    //   const refreshToken = new URL(window.location.href).searchParams.get(
-    //     "refreshToken"
-    //   );
-    //   localStorage.setItem("accessToken", accessToken);
-    //   localStorage.setItem("refreshToken", refreshToken);
-
-    //   console.log(snsState);
-
-    //   client.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    //   dispatch(check());
-    // }
   }, [affirmError, auth, authError, dispatch]);
 
   // user 값이 잘 설정되었는지 확인
@@ -261,7 +232,6 @@ const RegisterForm = () => {
       onSubmit={onSubmit}
       onClick={onClick}
       onCheck={onCheck}
-      // onSnsClick={onSnsClick}
       onEmailCheck={onEmailCheck}
       error={error}
       message={message}

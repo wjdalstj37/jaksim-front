@@ -1,36 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
 body {
   margin: 0;
+  font-family: 'Roboto', sans-serif;
+
+  /* 개발용 설정 */
+	height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: normal;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+button, input {
+  border-radius: 0;
+  border: none;
+  background: 0 0;
+  appearance: none;
+  outline: 0;
+  text-decoration: 0;
+  cursor: pointer;
+  -webkit-text-size-adjust: none;
+}
+
+strong, em, b {
+  font-weight: inherit;
+  font-style: normal;
+}
+
+ul, ol {
+  margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box; /* 엘리먼트의 box-sizing 값을 border-box로 설정 */
-  min-height: 100%;
+  list-style-type: none;
 }
 
-#root {
-  min-height: 100%;
+dl { margin: 0; }
+dd {
+  margin: 0;
+  display: inline;
 }
 
-/* 추후 회원인증 페이지에서
- 배경화면을 페이지의 전체 영역에 채우기 위한 용도 */
-html {
-  height: 100%;
-}
+figure { margin: 0; }
 
-/* 링크에 색상 및 밑줄 없애기 */
 a {
-  color: inherit;
   text-decoration: none;
+  color: inherit;
 }
 
-* {
-  box-sizing: inherit; /* 모든 엘리먼트의 box-sizing 값을 border-box로 설정 */
+th { font-weight: normal; }
+
+address { font-style: inherit; }
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.hidden {
+	display: none;
 }

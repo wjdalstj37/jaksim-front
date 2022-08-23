@@ -36,7 +36,7 @@ const SnsAuthPage = () => {
     }
   }, [navigate, user]);
 
-  return <div>sns로그인</div>;
+  return <div></div>;
 };
 
 export default SnsAuthPage;

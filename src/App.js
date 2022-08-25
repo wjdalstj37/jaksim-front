@@ -7,6 +7,7 @@ import SnsAuthPage from "./pages/SnsAuthPage";
 import CommunityPage from "./pages/CommunityPage";
 import MyStudyPage from "./pages/MyStudyPage";
 import PerStudyPage from "./pages/PerStudyPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
       <Route path="/mystudy" element={<MyStudyPage />} />
       <Route path="/stopwatch" element={<PerStudyPage />} />
       <Route path="/community" element={<CommunityPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
       <Route path="/findpw" element={<FindPwPage />} />
       <Route path="/@:email">
         <Route index element={<HomePage />} />

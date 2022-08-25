@@ -83,30 +83,29 @@ const MainHelp = styled.div`
     padding: 0.8rem 2rem;
     margin-bottom: 6rem;
   }
-  margin-bottom: 7rem;
 `;
 
-const Circle = styled.div`
-  box-sizing: border-box;
-  position: absolute;
-  height: 80px;
-  width: 82px;
-  left: 1150px;
-  top: 1820px;
-  background: #ffd4bd80;
-  border-radius: 100%;
-  & + & {
-    background: #684fca;
-    left: 169px;
-    top: 1900px;
-  }
-  &:last-child {
-    background: #fec03a;
+// const Circle = styled.div`
+//   box-sizing: border-box;
+//   position: absolute;
+//   height: 80px;
+//   width: 82px;
+//   left: 1150px;
+//   top: 1820px;
+//   background: #ffd4bd80;
+//   border-radius: 100%;
+//   & + & {
+//     background: #684fca;
+//     left: 169px;
+//     top: 1900px;
+//   }
+//   &:last-child {
+//     background: #fec03a;
 
-    left: 214px;
-    top: 1925px;
-  }
-`;
+//     left: 214px;
+//     top: 1925px;
+//   }
+// `;
 
 const BtnWrap = styled.div`
   display: flex;
@@ -166,9 +165,6 @@ const MainForm = () => {
         <Link to="/register">
           <button>5초만에 작심하루러 ✍🏻</button>
         </Link>
-        <Circle />
-        <Circle />
-        <Circle />
       </MainHelp>
     </MainWrap>
   );

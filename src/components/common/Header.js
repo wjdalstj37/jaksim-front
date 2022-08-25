@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Responsive from "./Responsive";
 import { FiMenu } from "react-icons/fi";
+import ProfileImg from "../image/default_profile.png";
 
 const HeaderBlock = styled.div`
   position: fixed;
@@ -34,6 +35,8 @@ const Wrapper = styled(Responsive)`
   }
 
   .right {
+    display: flex;
+    align-items: center;
     padding: 0 2.5rem;
     button {
       padding: 0 0.8rem;
@@ -46,11 +49,6 @@ const Wrapper = styled(Responsive)`
  */
 const Spacer = styled.div`
   height: 3.3rem;
-`;
-
-const UserInfo = styled.div`
-  font-weight: 800;
-  margin-right: 1rem;
 `;
 
 const MenuBar = styled.div`
@@ -85,6 +83,14 @@ const DropMenu = styled.div`
   display: flex;
 
   justify-content: center;
+`;
+
+const UserProfile = styled.div`
+  img {
+    margin-top: 0.2rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 `;
 
 const Header = ({ user, onLogout }) => {
@@ -129,7 +135,19 @@ const Header = ({ user, onLogout }) => {
 
           {user ? (
             <div className="right">
-              <UserInfo>{user.body.name}</UserInfo>
+              <UserProfile>
+                {user.body.image === null && (
+                  <Link to="/profile">
+                    <img src={ProfileImg} alt="프로필"></img>
+                  </Link>
+                )}
+                {user.body.image && (
+                  <Link to="/profile">
+                    <img src={user.body.image} alt="프로필"></img>
+                  </Link>
+                )}
+              </UserProfile>
+
               <button onClick={onLogout}>로그아웃</button>
             </div>
           ) : (

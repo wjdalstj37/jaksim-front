@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Responsive from "./Responsive";
 import { FiMenu } from "react-icons/fi";
-import ProfileImg from "../image/default_profile.png";
+import DefaultImg from "../image/default_profile.png";
 
 const HeaderBlock = styled.div`
   position: fixed;
@@ -90,6 +90,7 @@ const UserProfile = styled.div`
     margin-top: 0.2rem;
     width: 1.5rem;
     height: 1.5rem;
+    border-radius: 100%;
   }
 `;
 
@@ -135,19 +136,19 @@ const Header = ({ user, onLogout }) => {
 
           {user ? (
             <div className="right">
-              <UserProfile>
-                {user.body.image === null && (
+              {user.body.image === null ? (
+                <UserProfile>
                   <Link to="/profile">
-                    <img src={ProfileImg} alt="프로필"></img>
+                    <img src={DefaultImg} alt="프로필"></img>
                   </Link>
-                )}
-                {user.body.image && (
+                </UserProfile>
+              ) : (
+                <UserProfile>
                   <Link to="/profile">
                     <img src={user.body.image} alt="프로필"></img>
                   </Link>
-                )}
-              </UserProfile>
-
+                </UserProfile>
+              )}
               <button onClick={onLogout}>로그아웃</button>
             </div>
           ) : (

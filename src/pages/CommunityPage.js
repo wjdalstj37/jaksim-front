@@ -1,5 +1,7 @@
+import CommunityContainer from "../containers/common/CommunityContainer";
+
 const CommunityPage = () => {
-  return <div>커뮤니티</div>;
+  return <CommunityContainer />;
 };
 
 export default CommunityPage;

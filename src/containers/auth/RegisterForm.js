@@ -11,7 +11,6 @@ import {
 } from "../../modules/auth";
 import AuthForm from "../../components/auth/AuthForm";
 import { check } from "../../modules/user";
-
 import { useNavigate } from "react-router-dom";
 import client from "../../lib/api/client";
 
@@ -219,6 +218,7 @@ const RegisterForm = () => {
   useEffect(() => {
     if (user) {
       navigate("/"); // 홈 화면으로 이동
+
       try {
         localStorage.setItem("user", JSON.stringify(user));
       } catch (e) {

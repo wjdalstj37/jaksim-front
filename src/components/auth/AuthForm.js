@@ -4,6 +4,7 @@ import palette from "../../lib/styles/palettes";
 import KakaoLogo from "../image/kakao_logo.png";
 import NaverLogo from "../image/naver_logo.png";
 import GoogleLogo from "../image/google_logo.png";
+import { FaRegCheckCircle } from "react-icons/fa";
 
 /**
  * 회원가입 또는 로그인 폼을 보여줍니다.
@@ -92,12 +93,22 @@ const AgreeWrap = styled.div`
   flex-direction: column;
   margin-top: 5px;
   div {
-    padding: 3px 3px;
+    padding: 3px 0;
+    display: flex;
+    input {
+      display: none;
+    }
     label {
+      display: flex;
+      gap: 4px;
       color: #737373;
       font-weight: 400;
       letter-spacing: 0.1px;
       font-size: 13px;
+      align-items: center;
+    }
+    input:checked + label {
+      color: #684fca;
     }
   }
 `;
@@ -158,10 +169,9 @@ const ErrorMessage = styled.div`
 `;
 
 const InformMessage = styled.div`
-  color: blue;
+  color: #684fca;
   text-align: center;
   font-size: 0.875rem;
-  margin-top: 0.9rem;
 `;
 
 const AuthForm = ({
@@ -202,7 +212,6 @@ const AuthForm = ({
               <button onClick={onCheck}>인증번호 받기</button>
             </AuthEmail>
           )}
-          {message && <InformMessage>{message}</InformMessage>}
           {message && (
             <AuthEmail>
               <input
@@ -217,6 +226,7 @@ const AuthForm = ({
               )}
             </AuthEmail>
           )}
+          {message && <InformMessage>{message}</InformMessage>}
           {type === "register" && (
             <input
               autoComplete="nickname"
@@ -275,6 +285,7 @@ const AuthForm = ({
                 style={{ cursor: "pointer" }}
               />
               <label htmlFor="termsOfService" style={{ cursor: "pointer" }}>
+                <FaRegCheckCircle />
                 서비스 이용약관에 동의합니다. (필수)
               </label>
             </div>
@@ -287,6 +298,7 @@ const AuthForm = ({
                 style={{ cursor: "pointer" }}
               />
               <label htmlFor="privacyPolity" style={{ cursor: "pointer" }}>
+                <FaRegCheckCircle />
                 개인정보 수집 및 이용에 동의합니다. (필수)
               </label>
             </div>
@@ -299,6 +311,7 @@ const AuthForm = ({
                 style={{ cursor: "pointer" }}
               />
               <label htmlFor="receivePolity" style={{ cursor: "pointer" }}>
+                <FaRegCheckCircle />
                 이메일 수신에 동의합니다. (선택)
               </label>
             </div>

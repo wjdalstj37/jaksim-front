@@ -4,6 +4,9 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import FindPwPage from "./pages/FindPwPage";
 import SnsAuthPage from "./pages/SnsAuthPage";
+import CommunityPage from "./pages/CommunityPage";
+import MyStudyPage from "./pages/MyStudyPage";
+import PerStudyPage from "./pages/PerStudyPage";
 
 const App = () => {
   return (
@@ -13,6 +16,10 @@ const App = () => {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/findpw" element={<FindPwPage />} />
       <Route path="/oauth/redirect" element={<SnsAuthPage />} />
+      <Route path="/mystudy" element={<MyStudyPage />} />
+      <Route path="/stopwatch" element={<PerStudyPage />} />
+      <Route path="/community" element={<CommunityPage />} />
+      <Route path="/findpw" element={<FindPwPage />} />
       <Route path="/@:email">
         <Route index element={<HomePage />} />
       </Route>

@@ -1,12 +1,7 @@
-import HeaderContainer from "../containers/common/HeaderContainer";
+import MainForm from "../components/home/MainForm";
 
 const HomePage = () => {
-  return (
-    <>
-      <HeaderContainer />
-      <div>안녕하세요.</div>
-    </>
-  );
+  return <MainForm />;
 };
 
 export default HomePage;

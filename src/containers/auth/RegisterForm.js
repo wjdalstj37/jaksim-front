@@ -103,7 +103,6 @@ const RegisterForm = () => {
       [
         email,
         name,
-        token,
         password,
         passwordConfirm,
         termsOfService,
@@ -112,6 +111,10 @@ const RegisterForm = () => {
       ].includes("")
     ) {
       setError("빈 칸을 모두 입력하세요.");
+      return;
+    }
+    if ([token].includes("")) {
+      setError("이메일 인증을 시도해주세요.");
       return;
     }
     if (isEmail(email) === false) {
@@ -168,12 +171,12 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (affirm) {
-      setMessage("이메일 인증 성공");
+      setMessage("이메일 인증을 성공하였습니다.");
       console.log(affirm);
     }
 
     if (affirmError) {
-      setError("이메일 인증 실패");
+      setError("이메일 인증을 실패하였습니다.");
       console.log(affirmError);
       return;
     }
@@ -182,7 +185,7 @@ const RegisterForm = () => {
   // 회원가입 성공 / 실패 처리
   useEffect(() => {
     if (affirmError) {
-      setError("이메일 인증을 다시 시도해주세요.");
+      setError("인증번호를 확인해주세요.");
       return;
     }
 

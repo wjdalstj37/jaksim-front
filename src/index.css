@@ -34,7 +34,7 @@ strong, em, b {
   font-style: normal;
 }
 
-ul, ol {
+ul, li, ol {
   margin: 0;
   padding: 0;
   list-style-type: none;

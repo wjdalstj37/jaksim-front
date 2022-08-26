@@ -1,13 +1,13 @@
 import { useCallback, useEffect } from "react";
 import Editor from "../../components/community/Editor";
 import { useSelector, useDispatch } from "react-redux";
-import { changeField, initialize } from "../../modules/write";
+import { changeField, initialize } from "../../modules/board";
 
 const EditorContainer = () => {
   const dispatch = useDispatch();
-  const { title, body } = useSelector(({ write }) => ({
-    title: write.title,
-    body: write.body,
+  const { title, boardType } = useSelector(({ board }) => ({
+    title: board.title,
+    boardType: board.boardType,
   }));
 
   //   useCallback ?? >> useEffect 에서 나중에 이 함수를 쓸 건데, useCallback 을 써야 에디터에서 사용할 때 컴포넌트가 화면에 나타났을 딱 그시점에 한번만 실행 되기 때문.
@@ -26,8 +26,7 @@ const EditorContainer = () => {
     <Editor
       onChangeField={onChangeField}
       title={title}
-      body={body}
-      type="notice"
+      boardType={boardType}
     ></Editor>
   );
 };

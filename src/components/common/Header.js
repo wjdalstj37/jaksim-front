@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Responsive from "./Responsive";
 import { FiMenu } from "react-icons/fi";
 import DefaultImg from "../image/default_profile.png";
 
@@ -17,7 +16,7 @@ const HeaderBlock = styled.div`
 /**
  * Responsive 컴포넌트의 속성에 스타일을 추가해서 새로운 컴포넌트 생성
  */
-const Wrapper = styled(Responsive)`
+const Wrapper = styled.div`
   width: 100%;
   margin: 0;
   padding: 0;
@@ -120,7 +119,7 @@ const Header = ({ user, onLogout }) => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/community">
+                    <Link to="/board">
                       <button>커뮤니티</button>
                     </Link>
                   </li>

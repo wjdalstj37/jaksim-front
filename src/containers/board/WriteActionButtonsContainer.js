@@ -23,16 +23,17 @@ const WriteActionButtonContainer = ({ history }) => {
     const boardAddRequestDto = new FormData();
 
     const data = {
-      title,
-      bracket,
-      content,
-      boardType,
+      title: title,
+      bracket: bracket,
+      content: content,
+      boardType: boardType,
     };
 
-    boardAddRequestDto.append(
-      "data",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
+    console.log(data);
+
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], { type: "application/json" });
+    boardAddRequestDto.append("boardAddRequestDto", blob);
 
     dispatch(
       // 리덕스 스토어 안에 들어있는 값을 사용.

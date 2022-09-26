@@ -1,73 +1,67 @@
-import { createAction, handleActions } from "redux-actions";
-import createRequestSaga, {
-  createRequestActionTypes,
-} from "../lib/createRequestSaga";
-
 import * as boardAPI from "../lib/api/board";
+import { createRequestActionTypes } from "../lib/createRequestSaga";
+import createRequestSaga from "../lib/createRequestSaga";
+import { createAction, handleActions } from "redux-actions";
 import { takeLatest } from "redux-saga/effects";
+import produce from "immer";
 
-// 액션 타입 정의
+const INITIALIZE_FORM = "board/INITIALIZE_FORM";
+const TOGGLE = "board/TOGGLE";
 
-const INITIALIZE = "board/INITIALIZE";
-const CHANGE_FIELD = "board/CHANGE_FIELD";
+const [UPLOAD, UPLOAD_SUCCESS, UPLOAD_FAILURE] =
+  createRequestActionTypes("board/UPLOAD");
 
-// createRequestSaga 에서는 반복되는 부분을 함수화해서 정리해주기 위해서 createRequestActionTypes 사용해서 한번에 적음.
-// 글쓰기 관련
-const [POST_UPLOAD, POST_UPLOAD_SUCCESS, POST_UPLOAD_FAIURE] =
-  createRequestActionTypes("board/POST_UPLOAD");
-
-// 액션 생성 함수
-export const initialize = createAction(INITIALIZE);
-export const changeField = createAction(CHANGE_FIELD, ({ key, value }) => ({
+export const toggle = createAction(TOGGLE, ({ form, key, value }) => ({
+  form,
   key,
   value,
 }));
 
-export const postUpload = createAction(
-  POST_UPLOAD,
-  ({ boardAddRequestDto }) => ({
-    boardAddRequestDto,
-  })
-);
+export const initializeForm = createAction(INITIALIZE_FORM, (form) => form);
 
-// saga 생성
-const postUploadSaga = createRequestSaga(POST_UPLOAD, boardAPI.postUpload);
+export const postUpload = createAction(UPLOAD, ({ formData }) => ({
+  formData,
+}));
 
-export function* upLoadSaga() {
-  yield takeLatest(POST_UPLOAD, postUploadSaga);
+const uploadSaga = createRequestSaga(UPLOAD, boardAPI.postUpload);
+
+export function* boardSaga() {
+  yield takeLatest(UPLOAD, uploadSaga);
 }
-// 초기 상태 정의
-const initialState = {
-  title: "",
-  bracket: "",
-  content: "",
-  boardType: "",
-};
 
-// 리듀서 함수
+const initialState = {
+  postUpload: {
+    title: "",
+    bracket: "",
+    content: "",
+    boardType: "notice",
+    files: null,
+  },
+  upload: null,
+  uploadError: null,
+};
 
 const board = handleActions(
   {
-    [INITIALIZE]: (state) => initialState, // initialState 를 넣으면 초기 상태로 바뀜
-    [CHANGE_FIELD]: (state, { payload: { key, value } }) => ({
+    [INITIALIZE_FORM]: (state, { payload: form }) => ({
       ...state,
-      [key]: value, // 특정 key 값 업데이트
+      [form]: initialState[form],
+      uploadError: null,
     }),
-    [POST_UPLOAD]: (state) => ({
+    [TOGGLE]: (state, { payload: { form, key, value } }) =>
+      produce(state, (draft) => {
+        draft[form][key] = value;
+      }),
+
+    [UPLOAD_SUCCESS]: (state, { payload: upload }) => ({
       ...state,
-      // post, postError 초기화
-      post: null,
-      postError: null,
+      uploadError: null,
+      upload,
     }),
-    // post success
-    [POST_UPLOAD_SUCCESS]: (state, { payload: post }) => ({
+
+    [UPLOAD_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      post,
-    }),
-    //post fail
-    [POST_UPLOAD_FAIURE]: (state, { payload: postError }) => ({
-      ...state,
-      postError,
+      uploadError: error,
     }),
   },
   initialState

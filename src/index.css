@@ -1,14 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 
   /* 개발용 설정 */
-	height: 100%;
+  height: 100%;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: inherit;
   font-weight: normal;
   margin: 0;
@@ -18,7 +23,10 @@ p {
   margin: 0;
 }
 
-button, input {
+button,
+input,
+select,
+option {
   border-radius: 0;
   border: none;
   background: 0 0;
@@ -29,46 +37,58 @@ button, input {
   -webkit-text-size-adjust: none;
 }
 
-strong, em, b {
+strong,
+em,
+b {
   font-weight: inherit;
   font-style: normal;
 }
 
-ul, li, ol {
+ul,
+li,
+ol {
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
 
-dl { margin: 0; }
+dl {
+  margin: 0;
+}
 dd {
   margin: 0;
   display: inline;
 }
 
-figure { margin: 0; }
+figure {
+  margin: 0;
+}
 
 a {
   text-decoration: none;
   color: inherit;
 }
 
-th { font-weight: normal; }
+th {
+  font-weight: normal;
+}
 
-address { font-style: inherit; }
+address {
+  font-style: inherit;
+}
 
 .sr-only {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border-width: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .hidden {
-	display: none;
-} 
+  display: none;
+}

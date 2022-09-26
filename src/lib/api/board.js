@@ -3,19 +3,16 @@ import client from "./client";
 // 게시판 목록
 export const postList = ({ pageNumber, pageSize }) =>
   client.get("https://jaks1m.shop/api/v1/boards", { pageNumber, pageSize });
-// sort 정렬은 나중에 구현할 것
 
 // 게시판 상세
 export const postListDetail = ({ boardType }) =>
   client.get("https://jaks1m.shop/api/v1/boards/list", { boardType });
 
 // 게시글 등록
-export const postUpload = ({ boardAddRequestDto }) =>
+export const postUpload = ({ formData }) =>
   client.post(
     "https://jaks1m.shop/api/v1/boards/list",
-    {
-      boardAddRequestDto,
-    },
+    { formData },
     {
       headers: {
         "Content-Type": "multipart/form-data",

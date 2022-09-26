@@ -1,1 +1,1 @@
-[작심하루 사이트 주소](https://jaks1m.netlify.app/).
+[작심하루](https://jaks1m.netlify.app/)
